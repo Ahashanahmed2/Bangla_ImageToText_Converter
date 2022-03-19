@@ -5,14 +5,15 @@ const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
 const dotenv = require("dotenv")
-dotenv.config()
+
 const app = express();
 const http = require("http");
 const bodyParser = require("body-parser");
 const server = http.createServer(app);
-const io = require("socket.io")(server);
-
-
+const {Server} = require("socket.io");
+const i = new Server(server);
+const io = i.of("/upload")
+dotenv.config();
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -216,4 +217,4 @@ io.on("connection", socket => {
     
   }
 })
-server.listen(3000, () => console.log("server is connect"));
+server.listen();

@@ -54,9 +54,9 @@
     </div>
 
    
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-      let socket = io();
+   <script src="/socket.io/socket.io.js"></script>
+   <script>
+      let socket = io("http://localhost:3000/upload");
 
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");
@@ -75,7 +75,7 @@
       });
 
       socket.on("download", (m) => {
-        console.log(m)
+        
         let download = document.querySelector("#download");
         let dow = "<div class='row'>";
         m.map((element, index) => {
