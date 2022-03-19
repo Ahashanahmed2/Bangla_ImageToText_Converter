@@ -217,4 +217,6 @@ io.on("connection", socket => {
     
   }
 })
-server.listen();
+app.listen(3000,()=>{
+console.log('connected')
+});
