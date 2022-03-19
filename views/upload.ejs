@@ -56,7 +56,7 @@
    
    <script src="/socket.io/socket.io.js"></script>
    <script>
-      let socket = io("https://bangla-image-to-text-converter.herokuapp.com/upload");
+      let socket = io("/upload");
 
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");
