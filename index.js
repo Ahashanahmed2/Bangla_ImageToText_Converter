@@ -217,6 +217,6 @@ io.on("connection", socket => {
     
   }
 })
-server.listen(process.env.PORT,()=>{
+server.listen(3000,()=>{
 console.log('connected')
 });
