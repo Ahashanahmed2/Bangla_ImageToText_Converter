@@ -15,8 +15,8 @@
   </head>
 
   <body>
-     <h3 class="text-light bg-secondary text-center">Bangla Image To Text Converter</h3>
-    <h3 class="text-light bg-secondary text-center"> বাংলা ইমেজ থেকে টেক্স কনভার্টার </h3>
+     <h3 class="text-light bg-secondary text-center py-2">Bangla Image To Text Converter</h3>
+    <h3 class="text-light bg-secondary text-center py-2"> বাংলা ইমেজ থেকে টেক্স কনভার্টার </h3>
 
     <div class="container">
       <div class="row">
@@ -56,7 +56,7 @@
    
    <script src="/socket.io/socket.io.js"></script>
    <script>
-      let socket = io("http://localhost:3000/upload");
+      let socket = io("https://bangla-image-to-text-converter.herokuapp.com/upload");
 
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");

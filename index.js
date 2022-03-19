@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const i = new Server(server);
-const io = i.of("/upload")
+const io = i.of("https://bangla-image-to-text-converter.herokuapp.com/upload");
 dotenv.config();
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -217,4 +217,4 @@ io.on("connection", socket => {
     
   }
 })
-server.listen();
+server.listen(3000,()=>{console.log('connect')});
