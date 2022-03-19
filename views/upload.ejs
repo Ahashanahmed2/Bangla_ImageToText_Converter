@@ -56,7 +56,8 @@
    
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      let socket = io.connect('<%= process.env.APP_URL %>');
+      let socket = io();
+
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");
 
