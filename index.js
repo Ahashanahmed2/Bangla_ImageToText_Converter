@@ -40,11 +40,11 @@ app.get("/upload", (req, res) => {
 
 
 
-app.post("/upload", upload.array("avatar",5), (req, res) => {
+app.post("/upload", upload.array("avatar",10), (req, res) => {
   
   fs.readdir("./src/uploads", (err, v) => {
     if (err) return console.log(err);
-    if (v.length <= 3) {
+    if (v.length <= 10) {
       (() => {
         fs.readdir("./src/uploads", (err, dat) => {
           if (err) return console.log(err);
