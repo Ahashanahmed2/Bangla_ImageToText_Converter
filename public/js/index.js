@@ -4,23 +4,24 @@ delet.addEventListener('click', (e) => {
 
   
     axios({
-      method: "delete",
-      url: "https://bangla-image-to-text-converter.herokuapp.com/delete",
+      method:'delete',
+      url:'/delete'
+      
     }).then(() => {
-      location.replace("/");
-    });
+      location.replace('/')
+    })
   
 })
 
 function itemD(id) {
  
   axios({
-    method: "post",
-    url: "https://bangla-image-to-text-converter.herokuapp.com/itemd",
-    data: { id: id },
-  }).then((v) => {
-    location.reload();
-  });
+      method: "post",
+      url: "/itemd",
+     data:{id:id}  ,
+  }).then(v => {
+    location.reload()
+  })
 
    
 }
@@ -28,7 +29,7 @@ function itemD(id) {
 async function itemU(id) {
   let data = await axios({
     method: "post",
-    url: "https://bangla-image-to-text-converter.herokuapp.com/itemu",
+    url: "/itemu",
     data: { id: id },
   });
   console.log(data.data);
