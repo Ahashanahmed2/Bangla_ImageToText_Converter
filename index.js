@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
 
-global.kk = io;
+
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }))
@@ -70,9 +70,17 @@ app.post("/upload", upload.array("avatar",10), (req, res) => {
                 logger: (m) => {
                   
               
+                  io.on("connection", socket => {
+                      socket.emit("logg", m);
+                   })
+                    
+                  
+                      
+                    
+                      
                  
                   
-                    kk.emit("logg", m);
+                 
                   
            
                
@@ -81,9 +89,11 @@ app.post("/upload", upload.array("avatar",10), (req, res) => {
               }).then(({ data: { text } }) => {
                 let fil = value.replace(".jpg", ".text");
 
-                  setInterval(() => {
-                    kk.emit('file',fil)
-                  },1000)
+                io.on("connection", (socket) => {
+                    socket.emit("file", fil);
+                 })
+                   
+                 
                 fs.writeFile(
                   `./src/download/${fil}`,
                   text,
@@ -170,14 +180,14 @@ app.get("/reload", (req, res) => {
 })
 
 
-kk.on("connection", e => {
+io.on("connection", socket => {
  
   fs.readdir("./src/uploads", (err, file) => {
     if (err) return res.send(err);
 
 
-  
-    kk.emit("upload", file);
+
+    socket.emit("upload", file);
  
 
      
@@ -190,7 +200,7 @@ kk.on("connection", e => {
     fs.readdir("./src/download", (err, data) => {
       if (err) return console.log(err)
       
-      kk.emit("download", data);
+      socket.emit("download", data);
     
        
         
@@ -200,7 +210,7 @@ kk.on("connection", e => {
   if (fs.existsSync("./src/files.zip")) {
     fs.existsSync("./src/files.zip")
  
-    kk.emit("delete", fs.existsSync("./src/files.zip"));
+    socket.emit("delete", fs.existsSync("./src/files.zip"));
    
       
     
