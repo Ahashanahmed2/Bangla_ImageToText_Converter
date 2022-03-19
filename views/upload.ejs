@@ -16,12 +16,12 @@
   </head>
 
   <body>
-     <h3 class="text-light bg-secondary text-center py-2">Bangla Image To Text Converter</h3>
-    <h3 class="text-light bg-secondary text-center py-2"> বাংলা ইমেজ থেকে টেক্স কনভার্টার </h3>
-    <h3 class="text-light bg-secondary text-center py-1"> 
-     <p>শুধু মাত্র শখের বসে ফ্রি ডোমেইন এবং হোস্টিং এতে সাইট টি বানানো হয়েছে</p> 
-     <p>তাই ভাল কাজের আশা,না করার পরামর্শ দেওয়া হল</p>
-    </h3>
+     <h3 class="text-light bg-secondary text-center py-2">Bangla Image To Text Converter | বাংলা ইমেজ থেকে টেক্স কনভার্টার </h3>
+   <h6 class="text-light bg-secondary text-center py-1"> 
+     শুধু মাত্র শখের বসে ফ্রি ডোমেইন এবং হোস্টিং এতে সাইট টি বানানো হয়েছে
+   তাই ভাল কাজের আশা,না করার পরামর্শ দেওয়া হল
+    </h6>
+    
 
     <div class="container">
       <div class="row">
@@ -32,14 +32,15 @@
       <hr />
       <div class="flex text-light bg-dark p-2 text-center">
 <p id="aaa"></p>
-
+<div class="d-flex justify-content-center p-2 m-2" id="ss"></div>
+<!-- <div id="ll"></div> -->
 </div>
       <hr/>
       <div class="row">
         <div class="col text-center text-warning bg-dark">DOWNLOAD FILE</div>
       </div>
       <div id="download"></div>
-      <footer class="d-flex justify-content-around bg-warning">
+      <footer class="d-flex justify-content-around bg-warning mt-2">
         <div class="btn btn-dark">
           <a class="text-light" href="/">Back Home Page</a>
         </div>
@@ -57,7 +58,7 @@
 
       
     </div>
-<h3 class="text-light bg-secondary text-center py-2">ahashanahmed@yahoo.com</h3>
+<h3 class="text-light bg-secondary text-center py-2 mt-2">ahashanahmed@yahoo.com</h3>
    
    <script src="/socket.io/socket.io.js"></script>
    <script>
@@ -66,11 +67,11 @@
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");
 
-        let up = "<div class='row'> ";
+        let up = "<div id='upParant' class='row'> ";
         
           msg.forEach((element, index) => {
            
-            up += `<div onclick="itemU('${element}')" class='col bg-warning text-dark m-2'>${element}</div>`;
+            up += `<div  onclick="itemU('${element}')" class='col bg-warning text-dark m-2'>${element}</div>`;
             
           });
        
@@ -79,8 +80,9 @@
         upload.innerHTML = up;
       });
 
+
       socket.on("download", (m) => {
-        
+
         let download = document.querySelector("#download");
         let dow = "<div class='row'>";
         m.map((element, index) => {
@@ -105,6 +107,32 @@
       socket.on("logg",(d)=>{
        document.querySelector("#aaa").textContent =` ${d.userJobId} - ${d.progress}`
       })
+
+   
+        socket.on("file",(d)=>{
+  
+
+let ss = document.querySelector('#ss');
+  let ccc =document.createElement('p');
+  ccc.style.padding = "5px";
+  ccc.style.margin = "0px 5px 0px 5px";
+  ccc.style.backgroundColor= "#ddffdd";
+ccc.style.color= "#000000";
+  ccc.textContent= d;
+  ss.appendChild(ccc)
+
+
+      
+      })
+
+  //     socket.on("lodding",(l)=>{
+  //       let ll = document.querySelector('#ll');
+
+  // let ccc =document.createElement('p');
+  // ccc.style.color = "#ddffcc"
+  // ccc.textContent= `${l.rr} -- ${l.gg}`;
+  // ll.appendChild(ccc)
+  //     })
 
     </script>
     <script>

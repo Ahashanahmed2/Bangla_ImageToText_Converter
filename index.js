@@ -4,20 +4,20 @@ const AdmZip = require("adm-zip");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 
 const app = express();
 const http = require("http");
 const bodyParser = require("body-parser");
 const server = http.createServer(app);
-const {Server} = require("socket.io");
+const { Server } = require("socket.io");
 const i = new Server(server);
 const io = i.of("/upload");
 dotenv.config();
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "./src/uploads");
@@ -25,7 +25,6 @@ const storage = multer.diskStorage({
   filename: (req, file, cb) => {
     cb(null, file.originalname);
   },
- 
 });
 
 const upload = multer({
@@ -40,61 +39,44 @@ const upload = multer({
     cb("Error: Only jpeg or jpg or png Acceptable");
   },
 });
-
+ if (!fs.existsSync("./src")) {
+   fs.mkdirSync("./src");
+   fs.mkdirSync("./src/uploads");
+   fs.mkdirSync("./src/download");
+ }
 app.get("/", (req, res) => {
-  if (!fs.existsSync("./src")) {
-    fs.mkdirSync("./src");
-    fs.mkdirSync("./src/uploads");
-    fs.mkdirSync("./src/download");
-  }
+ 
   res.render("index");
 });
 app.get("/upload", (req, res) => {
   res.render("upload");
 });
 
-
-
-app.post("/upload", upload.array("avatar",10), (req, res) => {
-  
+app.post("/upload", upload.array("avatar", 4), (req, res) => {
   fs.readdir("./src/uploads", (err, v) => {
     if (err) return console.log(err);
-    if (v.length <= 10) {
-      (() => {
-        fs.readdir("./src/uploads", (err, dat) => {
-          if (err) return console.log(err);
-          dat.map((value) => {
+    if (v.length <= 4) {
+     
+          v.map((value) => {
             fs.readFile(`./src/uploads/${value}`, (err, dat) => {
               if (err) return console.log(err);
 
               Tesseract.recognize(dat, "ben", {
                 logger: (m) => {
-                  
-              
-                  io.on("connection", socket => {
-                      socket.emit("logg", m);
-                   })
-                    
-                  
-                      
-                    
-                      
-                 
-                  
-                 
-                  
-           
-               
-                console.log(m)
+                  setInterval(() => {
+                    io.emit("logg", m);
+                  }, 1000);
+
+                  console.log(m);
                 },
               }).then(({ data: { text } }) => {
                 let fil = value.replace(".jpg", ".text");
 
-                io.on("connection", (socket) => {
-                    socket.emit("file", fil);
-                 })
-                   
-                 
+               
+                  
+                  io.emit("file", fil);
+              
+
                 fs.writeFile(
                   `./src/download/${fil}`,
                   text,
@@ -105,66 +87,64 @@ app.post("/upload", upload.array("avatar",10), (req, res) => {
                     }
                   }
                 );
-                fs.unlink(`./src/uploads/${value}`, (err) => console.log(err));
-               
-              });
+                fs.unlink(`./src/uploads/${value}`, (err) => {
+                  if (err) {
+                    console.log(err)
+                  }
+
+                }
+                );
+            
+    
+              })
+            
             });
 
+              
             fs.unlink(`./ben.traineddata`, (err) => {
               console.log(err);
             });
           });
-        });
-      })();
-      res.render("upload")
+       res.render("upload");
     } else {
-      req.files.map(value => {
-       fs.unlink(`./src/uploads/${value.originalname}`,err=>console.log(err))
-     })
-     res.redirect("/");
+      req.files.map((value) => {
+        fs.unlink(`./src/uploads/${value.originalname}`, (err) =>
+          console.log(err)
+        );
+      });
+      res.redirect("/");
     }
   });
-
- 
-  
 });
 app.post("/download", (req, res) => {
   var zip = new AdmZip();
   fs.readdir("./src/download", (err, data) => {
     if (err) return console.log(err);
-    data.forEach(value => {
+    data.forEach((value) => {
       zip.addLocalFile(`./src/download/${value}`);
-        zip.writeZip("./src/files.zip");
-       
-    })
-     res.download("./src/files.zip");
-  })
-  
-  
-  
+      zip.writeZip("./src/files.zip");
+    });
+    res.download("./src/files.zip");
+  });
 });
 
 app.delete("/delete", (req, res) => {
-  
-    fs.unlink("./src/files.zip", (err) => console.log(err));
-  fs.unlink("./src/download",err=>console.log(err))
+  fs.unlink("./src/files.zip", (err) => console.log(err));
+  fs.unlink("./src/download", (err) => console.log(err));
 
-
-  res.render('index');
+  res.render("index");
 });
 
 app.post("/itemd", (req, res) => {
   let id = req.body.id;
 
-  fs.unlink(`./src/download/${id}`, err => {
+  fs.unlink(`./src/download/${id}`, (err) => {
     if (err) {
-      console.log(err)
+      console.log(err);
     }
     res.send(id);
-  })
-
-
-    });
+  });
+});
 
 app.post("/itemu", (req, res) => {
   let id = req.body.id;
@@ -177,46 +157,32 @@ app.post("/itemu", (req, res) => {
   });
 });
 app.get("/reload", (req, res) => {
-  res.redirect('/upload')
-})
+  res.redirect("/upload");
+});
 
-
-io.on("connection", socket => {
- 
+io.on("connection", (socket) => {
   fs.readdir("./src/uploads", (err, file) => {
-    if (err) return res.send(err);
-
-
+    if (err) return console.log(err);
 
     socket.emit("upload", file);
- 
-
-     
-     
   });
-  
 
 
-  if (fs.existsSync('./src/download')) {
+     if (fs.existsSync("./src/download")) {
     fs.readdir("./src/download", (err, data) => {
-      if (err) return console.log(err)
-      
+      if (err) return console.log(err);
+
       socket.emit("download", data);
-    
-       
-        
-      
-    })
+    });
   }
-  if (fs.existsSync("./src/files.zip")) {
-    fs.existsSync("./src/files.zip")
  
+ 
+  if (fs.existsSync("./src/files.zip")) {
+    fs.existsSync("./src/files.zip");
+
     socket.emit("delete", fs.existsSync("./src/files.zip"));
-   
-      
-    
   }
-})
-server.listen(3000,()=>{
-console.log('connected')
+});
+server.listen(3000, () => {
+  console.log("connected");
 });
