@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
   res.render("upload");
 });
 
-app.post("/", upload.array("avatar"), (req, res) => {
+app.post("/", upload.array("avatar",10), (req, res) => {
   fs.readdir("./src/uploads", (err, v) => {
     if (err) return console.log(err);
   

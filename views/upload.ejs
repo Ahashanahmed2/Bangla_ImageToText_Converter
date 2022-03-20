@@ -39,9 +39,9 @@
 
       <div id="upload"></div>
       <hr />
-      <div class="flex text-light bg-dark p-2 text-center">
-        <div class="d-flex justify-content-center p-2 m-2" id="ss"></div>
-      </div>
+  
+        <div  class="d-flex py-5 bg-dark p-2 m-2" id="ss"></div>
+     
       <hr />
       <div class="row">
         <div class="col text-center text-warning bg-dark">DOWNLOAD FILE</div>
@@ -75,7 +75,7 @@
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");
 
-        let up = "<div id='upParant' class='row'> ";
+        let up = "<div class='row bg-dark'> ";
 
         msg.forEach((element, index) => {
           up += `<div  onclick="itemU('${element}')" class='col bg-warning text-dark m-2'>${element}</div>`;
