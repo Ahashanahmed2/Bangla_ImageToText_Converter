@@ -44,18 +44,18 @@ const upload = multer({
    fs.mkdirSync("./src/uploads");
    fs.mkdirSync("./src/download");
  }
-app.get("/", (req, res) => {
+app.get("/upload", (req, res) => {
  
   res.render("index");
 });
-app.get("/upload", (req, res) => {
+app.get("/", (req, res) => {
   res.render("upload");
 });
 
-app.post("/upload", upload.array("avatar", 4), (req, res) => {
+app.post("/", upload.array("avatar"), (req, res) => {
   fs.readdir("./src/uploads", (err, v) => {
     if (err) return console.log(err);
-    if (v.length <= 4) {
+  
      
           v.map((value) => {
             fs.readFile(`./src/uploads/${value}`, (err, dat) => {
@@ -63,12 +63,9 @@ app.post("/upload", upload.array("avatar", 4), (req, res) => {
 
               Tesseract.recognize(dat, "ben", {
                 logger: (m) => {
-                  setInterval(() => {
-                    io.emit("logg", m);
-                  }, 1000);
-
+                 
                   console.log(m);
-                },
+                }
               }).then(({ data: { text } }) => {
                 let fil = value.replace(".jpg", ".text");
 
@@ -106,14 +103,7 @@ app.post("/upload", upload.array("avatar", 4), (req, res) => {
             });
           });
        res.render("upload");
-    } else {
-      req.files.map((value) => {
-        fs.unlink(`./src/uploads/${value.originalname}`, (err) =>
-          console.log(err)
-        );
-      });
-      res.redirect("/");
-    }
+    
   });
 });
 app.post("/download", (req, res) => {
