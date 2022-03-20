@@ -4,7 +4,7 @@ const AdmZip = require("adm-zip");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
-const dotenv = require("dotenv");
+
 
 const app = express();
 const http = require("http");
@@ -13,7 +13,7 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const i = new Server(server);
 const io = i.of("/upload");
-dotenv.config();
+
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -44,10 +44,7 @@ const upload = multer({
    fs.mkdirSync("./src/uploads");
    fs.mkdirSync("./src/download");
  }
-app.get("/upload", (req, res) => {
- 
-  res.render("index");
-});
+
 app.get("/", (req, res) => {
   res.render("upload");
 });
@@ -146,9 +143,7 @@ app.post("/itemu", (req, res) => {
     res.send(id);
   });
 });
-app.get("/reload", (req, res) => {
-  res.redirect("/upload");
-});
+
 
 io.on("connection", (socket) => {
   fs.readdir("./src/uploads", (err, file) => {
