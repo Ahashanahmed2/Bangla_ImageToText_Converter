@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const i = new Server(server);
-const io = i.of("/upload");
+const io = i();
 dotenv.config();
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
