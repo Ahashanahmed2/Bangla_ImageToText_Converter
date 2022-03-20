@@ -12,7 +12,7 @@ const bodyParser = require("body-parser");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const i = new Server(server);
-const io = i.of("/upload");
+const io = i.of("/");
 
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
   res.render("upload");
 });
 
-app.post("/", upload.array("avatar",10), (req, res) => {
+app.post("/", upload.array("avatar",5), (req, res) => {
   fs.readdir("./src/uploads", (err, v) => {
     if (err) return console.log(err);
   
@@ -67,8 +67,10 @@ app.post("/", upload.array("avatar",10), (req, res) => {
                 let fil = value.replace(".jpg", ".text");
 
                
+               
+                     io.emit("file", fil);
                   
-                  io.emit("file", fil);
+                 
               
 
                 fs.writeFile(
@@ -119,7 +121,7 @@ app.delete("/delete", (req, res) => {
   fs.unlink("./src/files.zip", (err) => console.log(err));
   fs.unlink("./src/download", (err) => console.log(err));
 
-  res.render("index");
+  res.render("upload");
 });
 
 app.post("/itemd", (req, res) => {

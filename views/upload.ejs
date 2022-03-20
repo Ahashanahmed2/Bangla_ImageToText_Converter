@@ -26,8 +26,8 @@
 
 <form class="mb-2" action="/" enctype="multipart/form-data" method="post">
   <div class="form-group">
-    <label for="exampleFormControlFile1">MAX 10 File Upload (</label>
-    <input type="file" class="form-control-file" name="avatar"  multiple>
+    <label for="exampleFormControlFile1">MAX 10 File Upload </label>
+    <input type="file" class="form-control-file p-3" name="avatar"  multiple>
     <button type="submit" class="btn btn-dark">submit</button>   
   </div>
 </form>
@@ -40,7 +40,7 @@
       <div id="upload"></div>
       <hr />
   
-        <div  class="d-flex py-5 bg-dark p-2 m-2" id="ss"></div>
+        <div class="py-1 bg-warning " id="ss"></div>
      
       <hr />
       <div class="row">
@@ -70,15 +70,16 @@
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-      let socket = io("/upload");
+      let socket = io("/");
 
       socket.on("upload", (msg) => {
         let upload = document.querySelector("#upload");
 
-        let up = "<div class='row bg-dark'> ";
-
+        let up = "<div id='displayItem' class='row bg-dark'> ";
+         
         msg.forEach((element, index) => {
-          up += `<div  onclick="itemU('${element}')" class='col bg-warning text-dark m-2'>${element}</div>`;
+          up += `<div onclick="itemU('${element}')" class='col bg-warning text-dark m-2'>${element}</div>`;
+      
         });
 
         up += "</div>";
@@ -110,10 +111,12 @@
       socket.on("file", (d) => {
         let ss = document.querySelector("#ss");
         let ccc = document.createElement("p");
-        ccc.style.padding = "5px";
-        ccc.style.margin = "0px 5px 0px 5px";
-        ccc.style.backgroundColor = "#ddffdd";
-        ccc.style.color = "#000000";
+        ccc.style.padding = "10px";
+      
+        ccc.style.margin = "10px 10px 10px 10px";
+        ccc.style.backgroundColor = "#000000";
+        
+        ccc.style.color = "#ffffff";
         ccc.textContent = d;
         ss.appendChild(ccc);
       });
