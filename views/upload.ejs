@@ -17,44 +17,49 @@
 
   <body>
     <h3 class="text-light bg-secondary text-center py-2">
-      Bangla Image To Text Converter | বাংলা ইমেজ থেকে টেক্স কনভার্টার
+      Bangla Image OR PDF To Text Converter | বাংলা ইমেজ অথবা পিডিএফ থেকে টেক্স কনভার্ট
     </h3>
-    <h6 class="text-light bg-secondary text-center py-1">
-      শুধু মাত্র শখের বসে ফ্রি ডোমেইন এবং হোস্টিং এতে সাইট টি বানানো হয়েছে তাই
-      ভাল কাজের আশা,না করার পরামর্শ দেওয়া হল
-    </h6>
+    <h5 class="text-light bg-secondary text-center py-1">
+      ৪জিবি Ram এর লেপটপ (৪ বছরের পুরাতন) ৫টা ইমেজ কনভার্টার করতে প্রায় ৫ মিনিট সময় নেয় । একসাথে ১০ টা ইমেজ সাবমিট করলে কম্পিউটার হেংক হয়ে যায় 
+     <p>এ জন্য আপনার কম্পিউটারের ক্ষমতা অনুযায়ী ইমেজ সাবমিট করার পরামর্শ </p>
+     <p>যদি PDF book হয়ে থাকে,ইমেজে (PDF to Image)[Play Store or any other site] কনভার্ট করে নিন</p>
+     <p><span class="bg-warning text-dark">Languages supported:-</span> Arabic,Bengali,Urdu</p>
+    </h5>
 
-<form class="mb-2" action="/" enctype="multipart/form-data" method="post">
+<form class="mb-2 text-center" action="/"  enctype="multipart/form-data" method="post">
   <div class="form-group">
-    <label for="exampleFormControlFile1">MAX 10 File Upload </label>
-    <input type="file" class="form-control-file p-3" name="avatar"  multiple>
-    <button type="submit" class="btn btn-dark">submit</button>   
+    <label class="p-2 bg-warning" for="exampleFormControlFile1">File Upload </label>
+    <input type="file" class="p-2 bg-info"  class="form-control-file p-3" name="avatar"  multiple>
+    <button type="submit" id="submitButton" class="btn btn-dark px-5 py-2 ml-2">submit</button>   
   </div>
 </form>
 
     <div class="container">
       <div class="row">
-        <div class="col text-center text-warning bg-dark">UPLOAD FILE</div>
+        <h3 class="col text-center text-warning bg-dark">Upload Image File</h3>
       </div>
-
+ 
       <div id="upload"></div>
+     
       <hr />
   
-        <div class="py-1 bg-warning " id="ss"></div>
+ 
+  <div class="text-center"><h4 class="py-1" id="ll"></h4></div> 
+<div class="py-1" id="ss"></div>
+
+        
      
       <hr />
       <div class="row">
-        <div class="col text-center text-warning bg-dark">DOWNLOAD FILE</div>
+        <h3 class="col text-center text-warning bg-dark">Download Text File</h3>
       </div>
       <div id="download"></div>
-      <footer class="d-flex justify-content-around bg-warning mt-2">
-        <div class="btn btn-dark">
-          <a class="text-light" href="/">Back Home Page</a>
-        </div>
+      <footer class="d-flex justify-content-around bg-warning my-3">
+      
         <div>
           <form action="/download" method="post">
             <button class="btn btn-info text-dark p-2">
-              Download Zip file
+              Download All text ZIP File
             </button>
           </form>
         </div>
@@ -64,63 +69,10 @@
       </footer>
     </div>
 
-    <h3 class="text-light bg-secondary text-center py-2 mt-2">
-      ahashanahmed@yahoo.com
-    </h3>
+   
 
     <script src="/socket.io/socket.io.js"></script>
-    <script>
-      let socket = io("/");
-
-      socket.on("upload", (msg) => {
-        let upload = document.querySelector("#upload");
-
-        let up = "<div id='displayItem' class='row bg-dark'> ";
-         
-        msg.forEach((element, index) => {
-          up += `<div onclick="itemU('${element}')" class='col bg-warning text-dark m-2'>${element}</div>`;
-      
-        });
-
-        up += "</div>";
-        upload.innerHTML = up;
-      });
-
-      socket.on("download", (m) => {
-        let download = document.querySelector("#download");
-        let dow = "<div class='row'>";
-        m.map((element, index) => {
-          let name = element.replace(".text", "");
-
-          dow += `<div onclick="if(confirm('item delete ${element}')== true){itemD('${element}')}" class='col bg-dark text-light m-1 px-2'><span class='bg-warning text-dark px-2'>${index}</span> <p>${name}</p></div>`;
-        });
-        dow += "</div>";
-        download.innerHTML = dow;
-      });
-
-      socket.on("delete", (d) => {
-        let de = document.querySelector("#delete");
-        if (d) {
-          console.log(d);
-          de.innerHTML = `<button class='btn btn-danger text-light p-2'>
-              Delete Zip file
-            </button>`;
-        }
-      });
-
-      socket.on("file", (d) => {
-        let ss = document.querySelector("#ss");
-        let ccc = document.createElement("p");
-        ccc.style.padding = "10px";
-      
-        ccc.style.margin = "10px 10px 10px 10px";
-        ccc.style.backgroundColor = "#000000";
-        
-        ccc.style.color = "#ffffff";
-        ccc.textContent = d;
-        ss.appendChild(ccc);
-      });
-    </script>
+   
     <script>
       src =
         "https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js";
