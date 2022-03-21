@@ -25,9 +25,8 @@ function itemU(id) {
     url: "/itemu",
     data: { id: id },
   }).then(() => {
-    location.replace('/')
-  })
-  
+    location.replace("/");
+  });
 }
 
 let socket = io("/");
@@ -39,17 +38,16 @@ socket.on("upload", (msg) => {
     submitButton.addEventListener("click", (e) => {
       e.preventDefault();
       submitButton.disabled = true;
-       ll.className = "py-2";
-      ll.className = "bg-warning"
-     
+      ll.className = "py-2";
+      ll.className = "bg-warning";
+
       ll.textContent = "wait for text file Or delete your' UPLOAD FILE '";
-      
     });
   }
 
   let upload = document.querySelector("#upload");
 
-  let up = "<div class='row bg-dark'> "
+  let up = "<div class='row bg-dark'> ";
 
   msg.forEach((element, index) => {
     up += `<div title="delete File Name:${element}" onclick="if(confirm('item delete ${element} Image ?')== true){ itemU('${element}')}" class='col bg-warning text-dark m-2'>${element}</div>`;
@@ -60,6 +58,7 @@ socket.on("upload", (msg) => {
 });
 
 socket.on("download", (m) => {
+  //download Text File
   let download = document.querySelector("#download");
   let dow = "<div class='row'>";
   m.map((element, index) => {
@@ -69,6 +68,15 @@ socket.on("download", (m) => {
   });
   dow += "</div>";
   download.innerHTML = dow;
+
+  //download All Text Zip File
+  if (m.length > 0) {
+    let downloadAllTextZipFile = document.querySelector("#downloadAllTextZipFile");
+  downloadAllTextZipFile.innerHTML = `<button class="btn btn-info text-dark p-2">
+              Download All text ZIP File
+            </button>`;
+  
+  }
 });
 
 socket.on("delete", (d) => {
@@ -84,7 +92,7 @@ socket.on("delete", (d) => {
 socket.on("file", (d) => {
   console.log(d);
   let ss = document.querySelector("#ss");
-  ss.style.backgroundColor = "gold"
+  ss.style.backgroundColor = "gold";
   let ccc = document.createElement("p");
   ccc.style.padding = "10px";
 
@@ -93,25 +101,25 @@ socket.on("file", (d) => {
 
   ccc.style.color = "#ffffff";
 
-ss.appendChild(ccc)
-  if (socket.on("upload", (msg) => { 
-    msg.length === 0 
-  })) {
-     let submitButton = document.querySelector("#submitButton");
+  ss.appendChild(ccc);
+  if (
+    socket.on("upload", (msg) => {
+      msg.length === 0;
+    })
+  ) {
+    let submitButton = document.querySelector("#submitButton");
     let ll = document.querySelector("#ll");
-   
+
     ll.className = "text-warning";
-     ll.className = "py-2";
+    ll.className = "py-2";
     ll.className = "bg-info";
-   
-    ll.textContent = 'your file fully .text converted';
+
+    ll.textContent = "your file fully .text converted";
     submitButton.disabled = false;
     setTimeout(() => {
-      location.replace('/')
-    },150000)
-  };
-
+      location.replace("/");
+    }, 150000);
+  }
 
   ccc.textContent = d;
-
 });
