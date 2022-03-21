@@ -41,7 +41,7 @@ socket.on("upload", (msg) => {
       ll.className = "py-2";
       ll.className = "bg-warning";
 
-      ll.textContent = "wait for text file Or delete your' UPLOAD FILE '";
+      ll.textContent = "Wait for text file Or delete your ' UPLOAD FILE '";
     });
   }
 
@@ -114,11 +114,11 @@ socket.on("file", (d) => {
     ll.className = "py-2";
     ll.className = "bg-info";
 
-    ll.textContent = "your file fully .text converted";
+    ll.textContent = "Your file fully .text converted";
     submitButton.disabled = false;
     setTimeout(() => {
       location.replace("/");
-    }, 150000);
+    }, 60000);
   }
 
   ccc.textContent = d;
