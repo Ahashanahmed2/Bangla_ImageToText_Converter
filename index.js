@@ -83,18 +83,6 @@ app.post("/", upload.array("avatar"), (req, res) => {
         });
       });
 
-      fs.unlink(`./ben.traineddata`, (err) => {
-        console.log(err);
-      });
-      fs.unlink(`./ara.traineddata`, (err) => {
-        console.log(err);
-      });
-      fs.unlink(`./urd.traineddata`, (err) => {
-        console.log(err);
-      });
-      fs.unlink(`./eng.traineddata`, (err) => {
-        console.log(err);
-      });
     });
     res.render("upload");
   });
