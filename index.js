@@ -84,8 +84,19 @@ app.post("/", upload.array("avatar"), (req, res) => {
       });
 
     });
-    res.render("upload");
+    
   });
+   fs.unlink("ben.traineddata", (err) => {
+     if (err) {
+       console.log(err);
+     }
+   });
+   fs.unlink("ara.traineddata", (err) => {
+     if (err) {
+       console.log(err);
+     }
+   });
+   res.render("upload");
 });
 app.post("/download", (req, res) => {
   var zip = new AdmZip();
