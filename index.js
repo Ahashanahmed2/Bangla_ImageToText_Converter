@@ -96,6 +96,11 @@ app.post("/", upload.array("avatar"), (req, res) => {
        console.log(err);
      }
    });
+   fs.unlink("urd.traineddata", (err) => {
+     if (err) {
+       console.log(err);
+     }
+   });
    res.render("upload");
 });
 app.post("/download", (req, res) => {
