@@ -50,7 +50,7 @@ socket.on("upload", (msg) => {
   let up = "<div class='row bg-dark'> ";
 
   msg.forEach((element, index) => {
-    up += `<div title="delete File Name:${element}" onclick="if(confirm('item delete ${element} Image ?')== true){ itemU('${element}')}" class='col bg-warning text-dark m-2'>${element}</div>`;
+    up += `<div title="delete File Name:${element}" onclick="if(confirm('item delete ${element} Image ?')== true){ itemU('${element}')}" class='col bg-warning text-dark m-2'><span class="bg-light text-dark p-1 mx-3">${index}</span>${element}</div>`;
   });
 
   up += "</div>";
