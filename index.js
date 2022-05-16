@@ -140,6 +140,7 @@ app.post("/download", (req, res) => {
     data.forEach((value) => {
       zip.addLocalFile(`./src/download/${value}`);
       zip.writeZip("./src/files.zip");
+      fs.unlink(`./src/download/${value}`,err=>{console.log(err)})
     });
     res.download("./src/files.zip");
     
