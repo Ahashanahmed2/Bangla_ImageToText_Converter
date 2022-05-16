@@ -10,6 +10,7 @@ const http = require("http");
 const bodyParser = require("body-parser");
 const server = http.createServer(app);
 const { Server } = require("socket.io");
+const { Socket } = require("dgram");
 const i = new Server(server);
 const io = i.of("/");
 
@@ -49,59 +50,88 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", upload.array("avatar"), (req, res) => {
+  
+function up(){
   fs.readdir("./src/uploads", (err, v) => {
     if (err) return console.log(err);
+   
+   
+         io.emit("sta", v[0]);
+      
+    
+   
+  
+    console.log(v, "bb")
+  
+    
+  
+    fs.readFile(`./src/uploads/${v[0]}`, (err, dat) => {
+      if (err) return console.log(err);
+      
+      Tesseract.recognize(dat, "ben+ara+urd", {
+        logger: (m) => {
+          console.log(m);
+        },
+      }).then(({ data: { text } }) => {
+        let fil = v[0].replace(/(.png|.jpg|.jpeg)/, ".text");
 
-    v.map((value) => {
-      fs.readFile(`./src/uploads/${value}`, (err, dat) => {
-        if (err) return console.log(err);
+       io.emit("file", fil);
 
-        Tesseract.recognize(dat, "ben+ara+urd", {
-          logger: (m) => {
-            console.log(m);
-          },
-        }).then(({ data: { text } }) => {
-          let fil = value.replace(".jpg", ".text");
-
-          io.emit("file", fil);
-
-          fs.writeFile(
-            `./src/download/${fil}`,
-            text,
-            { encoding: "utf8" },
-            (err) => {
-              if (err) {
-                console.log(err);
-              }
-            }
-          );
-          fs.unlink(`./src/uploads/${value}`, (err) => {
+        fs.writeFile(
+          `./src/download/${fil}`,
+          text,
+          { encoding: "utf8" },
+          (err) => {
             if (err) {
               console.log(err);
             }
-          });
+          }
+        );
+        fs.unlink(`./src/uploads/${v[0]}`, (err) => {
+          if (err) {
+            console.log(err);
+          }
         });
+        //call function
+        fs.readdir("./src/uploads", (err, v) => {
+          if (err) return console.log(err);
+          if (v.length !== 0) {
+            
+            up();
+           
+          }
+            
+        })
+       
       });
 
+           
+        
     });
-    
+  
   });
-   fs.unlink("ben.traineddata", (err) => {
-     if (err) {
-       console.log(err);
-     }
-   });
-   fs.unlink("ara.traineddata", (err) => {
-     if (err) {
-       console.log(err);
-     }
-   });
-   fs.unlink("urd.traineddata", (err) => {
-     if (err) {
-       console.log(err);
-     }
-   });
-   res.render("upload");
+}
+  //function end
+
+  fs.unlink("ben.traineddata", (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  fs.unlink("ara.traineddata", (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  fs.unlink("urd.traineddata", (err) => {
+    if (err) {
+      console.log(err);
+    }
+  });
+  up()
+
+    
+  res.render("upload");
 });
 app.post("/download", (req, res) => {
   var zip = new AdmZip();
@@ -112,13 +142,15 @@ app.post("/download", (req, res) => {
       zip.writeZip("./src/files.zip");
     });
     res.download("./src/files.zip");
+    
   });
 });
 
 app.delete("/delete", (req, res) => {
   fs.unlink("./src/files.zip", (err) => console.log(err));
-
-  res.render("upload");
+ 
+res.redirect('/')
+  
 });
 
 app.post("/itemd", (req, res) => {
@@ -159,7 +191,7 @@ io.on("connection", (socket) => {
   }
 
   if (fs.existsSync("./src/files.zip")) {
-    fs.existsSync("./src/files.zip");
+   
 
     socket.emit("delete", fs.existsSync("./src/files.zip"));
   }

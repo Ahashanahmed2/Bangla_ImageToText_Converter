@@ -36,7 +36,7 @@ socket.on("upload", (msg) => {
     let submitButton = document.querySelector("#submitButton");
     let ll = document.querySelector("#ll");
     submitButton.addEventListener("click", (e) => {
-      e.preventDefault();
+     
       submitButton.disabled = true;
       ll.className = "py-2";
       ll.className = "bg-warning";
@@ -77,12 +77,14 @@ socket.on("download", (m) => {
             </button>`;
   
   }
+
+
 });
 
 socket.on("delete", (d) => {
   let de = document.querySelector("#delete");
   if (d) {
-    console.log(d);
+    
     de.innerHTML = `<button class='btn btn-danger text-light p-2'>
               Delete Zip file
             </button>`;
@@ -90,7 +92,7 @@ socket.on("delete", (d) => {
 });
 
 socket.on("file", (d) => {
-  console.log(d);
+
   let ss = document.querySelector("#ss");
   ss.style.backgroundColor = "gold";
   let ccc = document.createElement("p");
@@ -109,17 +111,44 @@ socket.on("file", (d) => {
   ) {
     let submitButton = document.querySelector("#submitButton");
     let ll = document.querySelector("#ll");
-
+    let startSubject = document.querySelector("#startSubject");
+  let sta = document.querySelector("#sta");
+startSubject.textContent = "file is fully convert"
+    sta.textContent = '';
     ll.className = "text-warning";
     ll.className = "py-2";
     ll.className = "bg-info";
 
     ll.textContent = "Your file fully .text converted";
     submitButton.disabled = false;
-    setTimeout(() => {
-      location.replace("/");
-    }, 60000);
+  
   }
 
   ccc.textContent = d;
+
+
+});
+
+
+//start
+
+socket.on("sta", (d) => {
+ let ll = document.querySelector("#startSubject");
+  let ss = document.querySelector("#sta");
+  ss.style.backgroundColor = "gold";
+  
+  
+  ss.style.padding = "10pxss"
+  ss.style.margin = "10px 10px 10px 10px";
+  ss.style.backgroundColor = "#000000ss"
+  ss.style.color = "#ffffff";
+  ss.textContent = d;
+    ll.className = "text-warning";
+    ll.className = "py-2";
+    ll.className = "bg-info";
+ll.textContent = "file is running"
+ 
+
+
+  
 });
