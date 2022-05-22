@@ -50,87 +50,103 @@ app.get("/", (req, res) => {
 });
 
 app.post("/", upload.array("avatar"), (req, res) => {
+
+  let abc = req.body.inlineRadioOptions;
+
+  let le = '';
+  if (typeof abc === 'string') {
+   
+      le = abc
+    
+  }
+  if (typeof abc == 'object') {
+   
+     let cb = "";
+   abc.map(v => {
   
-function up(){
-  fs.readdir("./src/uploads", (err, v) => {
-    if (err) return console.log(err);
-   
-   
-         io.emit("sta", v[0]);
+    cb += v+'+'
       
+   })
     
-   
+    let cc = cb.replace(/\W$/, "");
+
+    le = cc && cc ;
+  }
+ 
+
   
-    console.log(v, "bb")
-  
-    
-  
-    fs.readFile(`./src/uploads/${v[0]}`, (err, dat) => {
+  function up() {
+    fs.readdir("./src/uploads", (err, v) => {
       if (err) return console.log(err);
-      
-      Tesseract.recognize(dat, "ben+ara+urd", {
-        logger: (m) => {
-          console.log(m);
-        },
-      }).then(({ data: { text } }) => {
-        let fil = v[0].replace(/(.png|.jpg|.jpeg)/, ".text");
 
-       io.emit("file", fil);
+      io.emit("sta", v[0]);
 
-        fs.writeFile(
-          `./src/download/${fil}`,
-          text,
-          { encoding: "utf8" },
-          (err) => {
+      fs.readFile(`./src/uploads/${v[0]}`, (err, dat) => {
+        if (err) return console.log(err);
+
+        Tesseract.recognize(dat, le, {
+          logger: (m) => {
+            console.log(m);
+          },
+        }).then(({ data: { text } }) => {
+
+          
+          let fil = v[0].replace(/(.png|.jpg|.jpeg)/, ".text");
+
+          io.emit("file", fil);
+
+          fs.writeFile(
+            `./src/download/${fil}`,
+            text,
+            { encoding: "utf8" },
+            (err) => {
+              if (err) {
+                console.log(err);
+              }
+            }
+          );
+          fs.unlink(`./src/uploads/${v[0]}`, (err) => {
             if (err) {
               console.log(err);
             }
-          }
-        );
-        fs.unlink(`./src/uploads/${v[0]}`, (err) => {
+          });
+          //call function
+          fs.readdir("./src/uploads", (err, v) => {
+            if (err) return console.log(err);
+            if (v.length !== 0) {
+              up();
+            }
+          });
+        });
+      });
+    });
+  }
+  //function end
+  
+  fs.readdir(__dirname, (err, data) => {
+    if (err) return console.log({ message: err });
+    
+ let vv = /\w*(.traineddata)/;
+    data.map((v, i) => {
+     let va = vv.test(v)
+      if (va) {
+        fs.unlink(v, (err) => {
           if (err) {
             console.log(err);
           }
         });
-        //call function
-        fs.readdir("./src/uploads", (err, v) => {
-          if (err) return console.log(err);
-          if (v.length !== 0) {
-            
-            up();
-           
-          }
-            
-        })
-       
-      });
-
-           
-        
+      }
+     
     });
   
   });
-}
-  //function end
+ 
 
-  fs.unlink("ben.traineddata", (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  fs.unlink("ara.traineddata", (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  fs.unlink("urd.traineddata", (err) => {
-    if (err) {
-      console.log(err);
-    }
-  });
-  up()
 
-    
+  
+
+  up();
+
   res.render("upload");
 });
 app.post("/download", (req, res) => {
@@ -140,18 +156,18 @@ app.post("/download", (req, res) => {
     data.forEach((value) => {
       zip.addLocalFile(`./src/download/${value}`);
       zip.writeZip("./src/files.zip");
-      fs.unlink(`./src/download/${value}`,err=>{console.log(err)})
+      fs.unlink(`./src/download/${value}`, (err) => {
+        console.log(err);
+      });
     });
     res.download("./src/files.zip");
-    
   });
 });
 
 app.delete("/delete", (req, res) => {
   fs.unlink("./src/files.zip", (err) => console.log(err));
- 
-res.redirect('/')
-  
+
+  res.redirect("/");
 });
 
 app.post("/itemd", (req, res) => {
@@ -192,8 +208,6 @@ io.on("connection", (socket) => {
   }
 
   if (fs.existsSync("./src/files.zip")) {
-   
-
     socket.emit("delete", fs.existsSync("./src/files.zip"));
   }
 });
